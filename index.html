@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bases de Datos y Tablas</title>
+</head>
+<body>
+    <h2>Bases de Datos</h2>
+    <ul id="bases"></ul>
+
+    <h4 id="tTablas">Tablas de la Base de Datos</h4>
+    <ul id="tablas"></ul>
+
+    <script>
+        function cargarBases() {
+            fetch('acciones.php?accion=bases')
+                .then(respuesta => respuesta.json())
+                .then(bases => {
+                    let lista = document.getElementById('bases');
+                    lista.innerHTML = '';
+                    bases.forEach(base => {
+                        let item = document.createElement('li');
+                        item.textContent = base;
+                        item.onclick = function() {
+                            cargarTablas(base);
+                        };
+                        lista.appendChild(item);
+                    });
+                });
+        }
+
+        function cargarTablas(base) {
+            fetch('acciones.php?accion=tablas&base=' + base)
+                .then(respuesta => respuesta.json())
+                .then(tablas => {
+                    let lista = document.getElementById('tablas');
+                    lista.innerHTML = '';
+                    document.getElementById('tTablas').style.display = 'block';
+                    tablas.forEach(tabla => {
+                        let item = document.createElement('li');
+                        item.textContent = tabla;
+                        lista.appendChild(item);
+                    });
+                });
+        }
+
+
+        cargarBases();
+    </script>
+</body>
+</html>
